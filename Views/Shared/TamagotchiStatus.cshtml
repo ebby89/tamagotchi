@@ -1,0 +1,58 @@
+@using TamagotchiGame.Models;
+
+@if (@Model["SelectedTamagotchi"] != null)
+{
+  <h2>@Model["SelectedTamagotchi"].Name</h2>
+
+  @if (@Model["SelectedTamagotchi"].IsDead)
+  {
+    <h1 class="dead-message">You failed your pet :C</h1>
+  }
+  else
+  {
+    if (@Model["SelectedTamagotchi"].IsHungry)
+    {
+      <h3>Feed your pet!</h3>
+    }
+    if (@Model["SelectedTamagotchi"].NeedsAttention)
+    {
+      <h3>Pet your pet!</h3>
+    }
+    if (@Model["SelectedTamagotchi"].NeedsSleep)
+    {
+      <h3>Sleep your pet!</h3>
+    }
+  }
+  <ul class="unstyled">
+    <li>
+      <p>
+        Hunger: @Model["SelectedTamagotchi"].Hunger
+        <a href="/tamagotchi/feed">
+          <button @if (@Model["SelectedTamagotchi"].IsDead){@Html.Raw("disabled")}>
+            Feed!
+          </button>
+        </a>
+      </p>
+    </li>
+    <li>
+      <p>
+        Attention: @Model["SelectedTamagotchi"].Attention
+        <a href="/tamagotchi/pet">
+          <button @if (@Model["SelectedTamagotchi"].IsDead){@Html.Raw("disabled")}>
+            Pet!
+          </button>
+        </a>
+      </p>
+    </li>
+    <li>
+      <p>
+        Rest: @Model["SelectedTamagotchi"].Rest
+        <a href="/tamagotchi/sleep">
+          <button @if (@Model["SelectedTamagotchi"].IsDead){@Html.Raw("disabled")}>
+            ZZzz!
+          </button>
+        </a>
+      </p>
+    </li>
+  </ul>
+}

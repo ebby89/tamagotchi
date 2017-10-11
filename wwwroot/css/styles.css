@@ -1,0 +1,9 @@
+.dead-message {
+  font-size: 100px;
+  color: red;
+  font-weight: bolder;
+}
+
+.unstyled {
+  list-style: none;
+}

@@ -1,0 +1,8 @@
+@using TamagotchiGame.Models;
+
+@foreach (Tamagotchi tamagotchi in Model["TamagotchiList"])
+{
+  <ul>
+    <li><a href="/tamagotchi/@tamagotchi.Id">@tamagotchi.Name</a></li>
+  </ul>
+}
