@@ -3,6 +3,15 @@
 @foreach (Tamagotchi tamagotchi in Model["TamagotchiList"])
 {
   <ul>
-    <li><a href="/tamagotchi/@tamagotchi.Id">@tamagotchi.Name</a></li>
+    <li>
+      <a href="/tamagotchi/@tamagotchi.Id">@tamagotchi.Name</a>
+      @if (@tamagotchi.IsDead){@Html.Raw("☠")}
+      else
+      {
+        @if (@tamagotchi.NeedsAttention){@Html.Raw("😢")}
+        @if (@tamagotchi.NeedsSleep){@Html.Raw("💤")}
+        @if (@tamagotchi.IsHungry){@Html.Raw("🍔")}
+      }
+    </li>
   </ul>
 }

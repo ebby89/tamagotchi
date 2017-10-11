@@ -7,8 +7,8 @@ namespace TamagotchiGame.Models
 {
     public class Tamagotchi
     {
-        private Timer timer;
-
+        private static Timer timer = new Timer(TimerTick, null, 0, 1000);
+        public static bool TimerIsRunning {get; private set;}
         private static List<Tamagotchi> _instances = new List<Tamagotchi> (){};
         public static Tamagotchi CurrentlySelected {get; private set;}
 
@@ -24,9 +24,6 @@ namespace TamagotchiGame.Models
 
         public Tamagotchi(string name)
         {
-            // Confusing timer stuff
-            timer = new Timer(this.TimerTick, null, 0, 1000);
-
             Id = _instances.Count;
             Name = name;
             Hunger = 100;
@@ -57,16 +54,29 @@ namespace TamagotchiGame.Models
         }
 
         // Timer makes this happen
-        private void TimerTick(Object stateInfo)
+        private static void TimerTick(Object stateInfo)
         {
-            PassTime();
+            foreach (Tamagotchi tamagotchi in _instances)
+            {
+                tamagotchi.PassTime(2);
+            }
         }
 
-        public void PassTime()
+        public static void PauseTimer()
         {
-            Hunger = MathHelpers.Clamp(Hunger - 1, 0, 100);
-            Attention = MathHelpers.Clamp(Attention - 1, 0, 100);
-            Rest = MathHelpers.Clamp(Rest - 1, 0, 100);
+            timer.Change(0, Timeout.Infinite);
+        }
+
+        public static void ResumeTimer()
+        {
+            timer.Change(0, 1000);
+        }
+
+        public void PassTime(int time)
+        {
+            Hunger = MathHelpers.Clamp(Hunger - time, 0, 100);
+            Attention = MathHelpers.Clamp(Attention - time, 0, 100);
+            Rest = MathHelpers.Clamp(Rest - time, 0, 100);
             this.SetStatus();
         }
 

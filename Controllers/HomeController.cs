@@ -35,12 +35,27 @@ namespace TamagotchiGame.Controllers
             return Redirect("/");
         }
 
+        [HttpGet("/tamagotchi/pause")]
+        public ActionResult Pause()
+        {
+            // TODO: Pause timer isn't working
+            if (Tamagotchi.TimerIsRunning)
+            {
+                Tamagotchi.PauseTimer();
+            }
+            else
+            {
+                Tamagotchi.ResumeTimer();
+            }
+            return Redirect("/");
+        }
+
         [HttpGet("/tamagotchi/fast-forward")]
         public ActionResult FastForward()
         {
             foreach (Tamagotchi tamagotchi in Tamagotchi.GetAll())
             {
-                tamagotchi.PassTime();
+                tamagotchi.PassTime(15);
             }
             return Redirect("/");
         }
