@@ -1,10 +1,14 @@
 using System.Collections.Generic;
+using System.Threading;
+using System;
 using Helpers;
 
 namespace TamagotchiGame.Models
 {
     public class Tamagotchi
     {
+        private Timer timer;
+
         private static List<Tamagotchi> _instances = new List<Tamagotchi> (){};
         public static Tamagotchi CurrentlySelected {get; private set;}
 
@@ -20,6 +24,9 @@ namespace TamagotchiGame.Models
 
         public Tamagotchi(string name)
         {
+            // Confusing timer stuff
+            timer = new Timer(this.TimerTick, null, 0, 1000);
+
             Id = _instances.Count;
             Name = name;
             Hunger = 100;
@@ -49,11 +56,17 @@ namespace TamagotchiGame.Models
             return CurrentlySelected;
         }
 
+        // Timer makes this happen
+        private void TimerTick(Object stateInfo)
+        {
+            PassTime();
+        }
+
         public void PassTime()
         {
-            Hunger = MathHelpers.Clamp(Hunger - 20, 0, 100);
-            Attention = MathHelpers.Clamp(Attention - 20, 0, 100);
-            Rest = MathHelpers.Clamp(Rest - 20, 0, 100);
+            Hunger = MathHelpers.Clamp(Hunger - 1, 0, 100);
+            Attention = MathHelpers.Clamp(Attention - 1, 0, 100);
+            Rest = MathHelpers.Clamp(Rest - 1, 0, 100);
             this.SetStatus();
         }
 

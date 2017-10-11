@@ -7,21 +7,23 @@ namespace TamagotchiGame.Controllers
 {
     public class HomeController : Controller
     {
-        private Dictionary<string, Object> _model = new Dictionary<string, Object>(){};
-
-        public HomeController()
-        {
-            _model.Add("TamagotchiList", Tamagotchi.GetAll());
-            _model.Add("SelectedTamagotchi", Tamagotchi.CurrentlySelected);
-        }
-
         [HttpGet("/"), ActionName("Index")]
         public ActionResult Index()
         {
+            Dictionary<string, Object> _model = new Dictionary<string, Object>(){};
+            _model.Add("TamagotchiList", Tamagotchi.GetAll());
+            _model.Add("SelectedTamagotchi", Tamagotchi.CurrentlySelected);
             return View(_model);
         }
 
-        [HttpPost("/tamagotchi/new"), ActionName("Index")]
+        [HttpGet("/tamagotchi/{id}")]
+        public ActionResult TamagotchiStatus(int id)
+        {
+            Tamagotchi.Select(id);
+            return Redirect("/");
+        }
+
+        [HttpPost("/tamagotchi/new")]
         public ActionResult NewTamagotchi()
         {
             string tamagotchiName = Request.Form["tamagotchi-name"];
@@ -30,53 +32,45 @@ namespace TamagotchiGame.Controllers
                 Tamagotchi NewTamagotchi = new Tamagotchi(tamagotchiName);
             }
 
-            return View(_model);
+            return Redirect("/");
         }
 
-        [HttpGet("/tamagotchi/{id}"), ActionName("Index")]
-        public ActionResult TamagotchiStatus(int id)
-        {
-            _model["SelectedTamagotchi"] = Tamagotchi.Select(id);
-            return View(_model);
-        }
-
-        [HttpGet("/tamagotchi/fast-forward"), ActionName("Index")]
+        [HttpGet("/tamagotchi/fast-forward")]
         public ActionResult FastForward()
         {
             foreach (Tamagotchi tamagotchi in Tamagotchi.GetAll())
             {
                 tamagotchi.PassTime();
             }
-            return View(_model);
+            return Redirect("/");
         }
 
-        [HttpGet("/tamagotchi/clear"), ActionName("Index")]
+        [HttpGet("/tamagotchi/clear")]
         public ActionResult Clear()
         {
             Tamagotchi.ClearAll();
-            _model["SelectedTamagotchi"] = null;
-            return View(_model);
+            return Redirect("/");
         }
 
-        [HttpGet("/tamagotchi/sleep"), ActionName("Index")]
+        [HttpGet("/tamagotchi/sleep")]
         public ActionResult Sleep()
         {
             Tamagotchi.CurrentlySelected.Sleep();
-            return View(_model);
+            return Redirect("/");
         }
 
-        [HttpGet("/tamagotchi/feed"), ActionName("Index")]
+        [HttpGet("/tamagotchi/feed")]
         public ActionResult Feed()
         {
             Tamagotchi.CurrentlySelected.Feed();
-            return View(_model);
+            return Redirect("/");
         }
 
-        [HttpGet("/tamagotchi/pet"), ActionName("Index")]
+        [HttpGet("/tamagotchi/pet")]
         public ActionResult Pet()
         {
             Tamagotchi.CurrentlySelected.Pet();
-            return View(_model);
+            return Redirect("/");
         }
     }
 }
